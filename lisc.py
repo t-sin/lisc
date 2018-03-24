@@ -8,7 +8,7 @@ def _peek_char(stream):
     return [(None, stream) if pos >= len(stream[0]) else (None, stream) if pos == -1 else (stream[0][pos], stream) for pos in [stream[1]]][0]
 
 def _make_stream(s):
-    return [([s, 0], read_char, peek_char) for read_char in [lambda stream: [(stream.pop() and None) or stream.append(-1) or (None, stream) if pos >= len(stream[0]) else (None, stream) if pos == -1 else c.append(stream[0][pos]) or (stream.pop() and None) or stream.append(pos+1) or (c[0], stream) for c in [[]] for pos in [stream[1]]][0]] for peek_char in [lambda stream: [(None, stream) if pos >= len(stream[0]) else (None, stream) if pos == -1 else (stream[0][pos], stream) for pos in [stream[1]]][0]]
+    return [s, 0]
 
 
 def read_list(s):

@@ -10,17 +10,15 @@ def _peek_char(stream):
 def _make_stream(s):
     return [s, 0]
 
+## readers
+def _read_list(stream):
+    return [[(_read_char(stream) and None) or loop[1:] if _peek_char(stream)[0] == ')' else loop[1:] if _peek_char(stream)[0] == None else loop.append(l_read(stream)) for l in loop] for loop in [[None]]][0][-1]
 
-def read_list(s):
-    print('read-list: ',s)
-    return [[clis.clear() or (l,i) if c==')' else (l,i) if c==' ' else [[clis.pop(0) for j in range(n)] and l.append(ss) or (l,i+n) for ss,n in [l_read(s[i:])]][0] for l in [[]] for i,c in clis] for clis in [list(enumerate(s))]][0][0]
+def _read_symbol(stream):
+    return ''.join([[loop if _peek_char(stream)[0] == ')' else (_read_char(stream) and None) or loop if _peek_char(stream)[0] == ' ' else loop if _peek_char(stream)[0] == None else loop.append(_read_char(stream)[0]) for l in loop] for loop in [['']]][0][-1])
 
-def read_symbol(s):
-    return [(l.append((''.join(n), len(n)-1))) or l if c == ' ' or c == ')' else n.append(c) or l for n in [[]] for l in [[]] for c in s][0][0]
-
-def l_read(s):
-    print('l_read:', s)
-    return [read_list(s[1:]) if s[0] == '(' else read_symbol(s) for s in [list(''.join(s).strip())]][0]
+def l_read(stream):
+    return [[loop.append(None) or _read_char(stream) if _peek_char(stream)[0] == ' ' else None for l in loop] for loop in [[None]]] and ((_read_char(stream) and None) or _read_list(stream) if _peek_char(stream)[0] == '(' else _read_symbol(stream))
 
 env = (None, {})
 def l_eval(l, env=env):
@@ -30,4 +28,4 @@ def l_print(l):
     return l
 
 if __name__ == '__main__':
-    print(l_print(l_eval(l_read(list(input('> '))))))
+    print(l_print(l_eval(l_read(_make_stream(input('> '))))))

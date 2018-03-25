@@ -67,8 +67,7 @@ def l_eval(l, env=env):
                     return fn[2](*eval_args)
                 else:
                     if len(fn[1])+1 == len(l):
-                        new_env = dict(zip(fn[1], eval_args))
-                        return fn[2](new_env)
+                        return fn[2](dict(zip(fn[1], eval_args)))
                     else:
                         return '__wrong_number_of_args__'
             else:

@@ -58,8 +58,7 @@ def l_eval(l, env=env):
         elif l[0] == 'lambda':
             return ('lambda', l[1], lambda new_env: l_eval(l[2], (env, new_env))) if len(l) == 3 else '__invalid_lambda_expression__'
         elif l[0] == 'define':
-            env[1][l[1]] = l_eval(l[2], env)
-            return env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__'
+            return env[1].update({l[1]: l_eval(l[2], env)}) or (env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__')
         else:
             fn = l_eval(l[0], env)
             if type(fn) is tuple and fn[0] == 'lambda':

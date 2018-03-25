@@ -75,8 +75,7 @@ def l_eval(l, env=env):
             env[1][l[1]] = l_eval(l[2], env)
             return env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__'
         else:
-            print(l, env)
-            fn = l_eval(l[0], env[0])
+            fn = l_eval(l[0], env)
             if type(fn) is tuple and fn[0] == 'lambda':
                 eval_args = [l_eval(a, env) for a in l[1:]]
                 if fn[1] is None:
@@ -84,17 +83,14 @@ def l_eval(l, env=env):
                 else:
                     if len(fn[1])+1 == len(l):
                         new_env = dict(zip(fn[1], eval_args))
-                        print('env ', new_env)
                         return fn[2](new_env)
                     else:
                         return '__wrong_number_of_args__'
             else:
                 return '__undefined_operator__'
     elif type(l) is str:
-        print(l, env)
         def _search_val(e, s):
-            v = e[1].get(s, None)
-            return v if v else _search_val(e[0], s) if e[0] else '__unbound_variable__'
+            return ['__unbound_variable__' if e is None else v if v else _search_val(e[0], s) for v in [e[1].get(s, None)]][0]
         return _search_val(env, l)
     else:
         return '__invalid_object__'

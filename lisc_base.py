@@ -38,42 +38,60 @@ def l_read(s):
     else:
         return l_read_symbol(s2)
 
+def l_atom(o):
+    return 't' if type(obj) is not list else 'nil'
+
+def l_cons(a, b):
+    return [a, b]
+
+def l_car(l):
+    return l[0]
+
+def l_cdr(l):
+    return l[1:]
+
+def l_eq(a, b):
+    return 't' if a == b else 'nil'
+
+
 env = (None, {})
+env[1]['atom'] = ('lambda', None, l_atom)
+env[1]['cons'] = ('lambda', None, l_cons)
+env[1]['car'] = ('lambda', None, l_car)
+env[1]['cdr'] = ('lambda', None, l_cdr)
+env[1]['eq'] = ('lambda', None, l_eq)
+
 def l_eval(l, env=env):
     if type(l) is list:
         if len(l) == 0:
             return 'nil'
-        elif l[0] == 'atom':
-            return 't' if len(l) == 2 and type(l[1]) is not list else 'nil'
-        elif l[0] == 'cons':
-            return [l_eval(l[1], env), l_eval(l[2], env)] if len(l) == 3 else '__cons_invalid_argument__'
-        elif l[0] == 'car':
-            return l_eval(l[1], env)[0] if len(l) == 2 and type(l[1]) is list else '__car_invalid_argument__'
-        elif l[0] == 'cdr':
-            return l_eval(l[1], env)[1:] if len(l) == 2 and type(l[1]) is list else '__cdr_invalid_argument__'
-        elif l[0] == 'eq':
-            return l_eval(l[1], env) == l_eval(l[2], env) if len(l) == 3 else 'nil' 
         elif l[0] == 'if':
             return l_eval(l[2], env) if len(l) == 4 and l_eval(l[1], env) == 't'else l_eval(l[3], env)
         elif l[0] == 'quote':
             return l[1] if len(l) == 2 else '__quote_invalid_argument__'
         elif l[0] == 'lambda':
-            return ('lambda', l[1], l[2]) if len(l) == 3 else '__invalid_lambda_expression__'
+            return ('lambda', l[1], lambda new_env: l_eval(l[2], (env, new_env))) if len(l) == 3 else '__invalid_lambda_expression__'
         elif l[0] == 'define':
             env[1][l[1]] = l_eval(l[2], env)
             return env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__'
         else:
-            fn = env[1][l[0]]
+            print(l, env)
+            fn = l_eval(l[0], env[0])
             if type(fn) is tuple and fn[0] == 'lambda':
-                if len(fn[1])+1 == len(l):
-                    new_env = dict(zip(fn[1], [l_eval(a, env) for a in l[1:]]))
-                    print('env ', new_env)
-                    return l_eval(fn[2], (env, new_env))
+                eval_args = [l_eval(a, env) for a in l[1:]]
+                if fn[1] is None:
+                    return fn[2](*eval_args)
                 else:
-                    return '__wrong_number_of_args__'
+                    if len(fn[1])+1 == len(l):
+                        new_env = dict(zip(fn[1], eval_args))
+                        print('env ', new_env)
+                        return fn[2](new_env)
+                    else:
+                        return '__wrong_number_of_args__'
             else:
                 return '__undefined_operator__'
     elif type(l) is str:
+        print(l, env)
         def _search_val(e, s):
             v = e[1].get(s, None)
             return v if v else _search_val(e[0], s) if e[0] else '__unbound_variable__'

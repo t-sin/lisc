@@ -39,6 +39,8 @@ def l_read(s):
         return l_read_symbol(s2)
 
 env = (None, {})
+env[1]['nil'] = 'nil'
+env[1]['t'] = 't'
 env[1]['atom'] = ('lambda', None, lambda o: 't' if type(o) is not list else 'nil')
 env[1]['cons'] = ('lambda', None, lambda a, b: [a, b])
 env[1]['car'] = ('lambda', None, lambda l: l[0])

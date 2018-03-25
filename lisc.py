@@ -30,9 +30,11 @@ env[1]['car'] = ('lambda', None, lambda l: l[0])
 env[1]['cdr'] = ('lambda', None, lambda l: l[1:] if len(l) > 1 else 'nil')
 env[1]['eq'] = ('lambda', None, lambda a, b: 't' if a == b else 'nil')
 
+# evaluator
 def l_eval(l, env=env):
-    return l
+    return ('nil' if len(l) == 0 else (l_eval(l[2], env) if len(l) == 4 and l_eval(l[1], env) == 't' else l_eval(l[3], env)) if l[0] == 'if' else (l[1] if len(l) == 2 else '__quote_invalid_argument__') if l[0] == 'quote' else (('lambda', l[1], lambda new_env: l_eval(l[2], (env, new_env))) if len(l) == 3 else '__invalid_lambda_expression__') if l[0] == 'lambda' else (env[1].update({l[1]: l_eval(l[2], env)}) or (env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__')) if l[0] == 'define' else [[fn[2](*eval_args) if fn[1] is None else fn[2](dict(zip(fn[1], eval_args))) if len(fn[1])+1 == len(l) else '__wrong_number_of_args__' for eval_args in [[l_eval(a, env) for a in l[1:]]]][0] if type(fn) is tuple and fn[0] == 'lambda' else '__undefined_operator__' for fn in [l_eval(l[0], env)]][0]) if type(l) is list else [search_val(env, l) for _ in [[]] for search_val in [lambda e, s: (e is None and '__unbound_variable__') or [v if v else search_val(e[0], s) for v in [e[1].get(s, None)]][0]]][0] if type(l) is str else '__invalid_object__'
 
+# printer
 def l_print(l):
     return '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list or type(l) is tuple else str(l)
 

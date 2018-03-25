@@ -38,28 +38,12 @@ def l_read(s):
     else:
         return l_read_symbol(s2)
 
-def l_atom(o):
-    return 't' if type(obj) is not list else 'nil'
-
-def l_cons(a, b):
-    return [a, b]
-
-def l_car(l):
-    return l[0]
-
-def l_cdr(l):
-    return l[1:]
-
-def l_eq(a, b):
-    return 't' if a == b else 'nil'
-
-
 env = (None, {})
-env[1]['atom'] = ('lambda', None, l_atom)
-env[1]['cons'] = ('lambda', None, l_cons)
-env[1]['car'] = ('lambda', None, l_car)
-env[1]['cdr'] = ('lambda', None, l_cdr)
-env[1]['eq'] = ('lambda', None, l_eq)
+env[1]['atom'] = ('lambda', None, lambda o: 't' if type(o) is not list else 'nil')
+env[1]['cons'] = ('lambda', None, lambda a, b: [a, b])
+env[1]['car'] = ('lambda', None, lambda l: l[0])
+env[1]['cdr'] = ('lambda', None, lambda l: l[1:])
+env[1]['eq'] = ('lambda', None, lambda a, b: 't' if a == b else 'nil')
 
 def l_eval(l, env=env):
     if type(l) is list:

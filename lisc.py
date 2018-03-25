@@ -20,7 +20,16 @@ def _read_symbol(stream):
 def l_read(stream):
     return [[loop.append(None) or _read_char(stream) if _peek_char(stream)[0] == ' ' else None for l in loop] for loop in [[None]]] and ((_read_char(stream) and None) or _read_list(stream) if _peek_char(stream)[0] == '(' else _read_symbol(stream))
 
+# constants and functions
 env = (None, {})
+env[1]['nil'] = 'nil'
+env[1]['t'] = 't'
+env[1]['atom'] = ('lambda', None, lambda o: 't' if type(o) is not list else 'nil')
+env[1]['cons'] = ('lambda', None, lambda a, b: [a, b])
+env[1]['car'] = ('lambda', None, lambda l: l[0])
+env[1]['cdr'] = ('lambda', None, lambda l: l[1:] if len(l) > 1 else 'nil')
+env[1]['eq'] = ('lambda', None, lambda a, b: 't' if a == b else 'nil')
+
 def l_eval(l, env=env):
     return l
 

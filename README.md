@@ -10,6 +10,18 @@ Because Python's list comprehensions are Turing complete ([Japanese article](htt
 This is an implementation of LISP, and this is wrote as a Python's list comprehension.
 
 
+## Requirements
+
+- python 3.x
+
+
+## How to run
+
+```sh
+$ python3 <(curl -sL https://raw.githubusercontent.com/t-sin/lisc/master/lisc.py)
+```
+
+
 ## Compromises
 
 For restriction of list comprehension, some LISC's behaviours are felt little strange.

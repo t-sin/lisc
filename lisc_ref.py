@@ -45,7 +45,7 @@ env[1]['atom'] = ('lambda', None, lambda o: 't' if type(o) is not list else 'nil
 env[1]['cons'] = ('lambda', None, lambda a, b: [a, b])
 env[1]['car'] = ('lambda', None, lambda l: l[0])
 env[1]['cdr'] = ('lambda', None, lambda l: l[1:] if len(l) > 1 else 'nil')
-env[1]['eq'] = ('lambda', None, lambda a, b: 't' if a == b else 'nil')
+env[1]['eq'] = ('lambda', None, lambda a, b: 't' if ('nil' in [a,b] and [] in [a,b]) or a == b else 'nil')
 
 def l_eval(l, env=env):
     if type(l) is list:

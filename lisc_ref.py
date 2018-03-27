@@ -42,7 +42,7 @@ env = (None, {})
 env[1]['nil'] = []
 env[1]['t'] = 't'
 env[1]['atom'] = ('lambda', None, lambda o: 't' if type(o) is not list else [])
-env[1]['cons'] = ('lambda', None, lambda a, b: [a, b])
+env[1]['cons'] = ('lambda', None, lambda a, b: [a] if b in ['nil', []] else [a] + b if type(b) is list else '__{}_is_not_a_list__'.format(b))
 env[1]['car'] = ('lambda', None, lambda l: l[0])
 env[1]['cdr'] = ('lambda', None, lambda l: l[1:] if len(l) > 1 else [])
 env[1]['eq'] = ('lambda', None, lambda a, b: 't' if ('nil' in [a,b] and [] in [a,b]) or a == b else [])

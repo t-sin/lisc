@@ -21,6 +21,13 @@ This is an implementation of LISP, and this is wrote as a Python's list comprehe
 $ python3 <(curl -sL https://raw.githubusercontent.com/t-sin/lisc/master/lisc.py)
 ```
 
+## TODO
+
+- [ ] load programs from stdin/files
+- [ ] string type
+- [ ] input/output string
+
+
 
 ## Compromises
 

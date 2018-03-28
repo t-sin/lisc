@@ -21,6 +21,36 @@ This is an implementation of LISP, and this is wrote as a Python's list comprehe
 $ python3 <(curl -sL https://raw.githubusercontent.com/t-sin/lisc/master/lisc.py)
 ```
 
+## Examples
+
+```lisp
+> (cons (quote a) nil)
+(a)
+> (eq (quote a) nil)
+nil
+> (eq () nil)
+t
+> (define val (quote foo))
+foo
+> (if (eq val bar) (quote true) (quote false))
+false
+> ((lambda (a) (quote lisp)) t)
+lisp
+```
+
+Reversing a list with recursion and list operation
+
+```lisp
+> (define -reverse-rec (lambda (lis rev) (if (eq lis nil) rev (-reverse-rec (cdr lis) (cons (car lis) rev)))))
+[lambda ['lis', 'rev'] <function <listcomp>.<lambda>.<locals>.<lambda> at 0x7f8052332ea0>]
+> (define reverse (lambda (lis) (-reverse-rec lis nil)))
+[lambda ['lis'] <function <listcomp>.<lambda>.<locals>.<lambda> at 0x7f8052356048>]
+> (reverse (quote (1 2 3 4 5)))
+(5 4 3 2 1)
+```
+
+...and more
+
 ## TODO
 
 - [ ] load programs from stdin/files

@@ -58,14 +58,13 @@ Reversing a list with recursion and list operation
 - [ ] input/output string
 
 
-
 ## Compromises
 
 For restriction of list comprehension, some LISC's behaviours are felt little strange.
 
 - Conses are represented as a Python's lists
     - therefore, behaviours of `cons`, `car` and `cdr` are different from Pure LISP little a bit
-- Errors are returned as a normal value like '__*__'
+- Errors are returned as a normal value like `__*__`
     - because raising and excepting exception are statements, not expression
 
 

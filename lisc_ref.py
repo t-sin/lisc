@@ -102,6 +102,8 @@ def l_eval(l, env=env):
                         return '__wrong_number_of_args__'
             else:
                 return '__undefined_operator__'
+    elif type(l) is tuple:
+        return l
     elif type(l) is str:
         def _search_val(e, s):
             return [ v if v is not None else '__unbound_variable__' if e[0] is None else _search_val(e[0], s) for v in [e[1].get(s, None)]][0]

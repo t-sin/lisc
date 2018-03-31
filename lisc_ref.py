@@ -19,7 +19,7 @@ def l_read_list(s):
         if ch == ')':
             _read_char(s)
             return list
-        elif ch == ' ':
+        elif ch in [' ', '\n']:
             _read_char(s)
         else:
             list.append(l_read(s))
@@ -31,7 +31,7 @@ def l_read_symbol(s):
         if ch is None:
             return ''.join(name)
 
-        if ch in [' ', ')']:
+        if ch in [' ', '\n', ')']:
             return ''.join(name)
         else:
             _read_char(s)
@@ -53,7 +53,7 @@ def l_read_string(s):
 def l_read(s):
     while True:
        ch, _ =  _peek_char(s)
-       if ch != ' ': break
+       if ch not in [' ', '\n']: break
        _read_char(s)
 
     ch, _ = _peek_char(s)
@@ -116,7 +116,7 @@ def l_eval(l, env=env):
         return '__invalid_object__'
 
 def l_print(l):
-    return 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else repr(l[1]) if l[0] == 'str' else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
+    return 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else repr(l[1]) if type(l) is tuple and l[0] == 'str' else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
 
 if __name__ == '__main__':
     [b.append(None) or print(l_print(l_eval(l_read(_make_stream(input('> ')))))) for b in [[None]] for a in b]

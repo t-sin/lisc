@@ -119,4 +119,4 @@ def l_print(l):
     return 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else repr(l[1]) if type(l) is tuple and l[0] == 'str' else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
 
 if __name__ == '__main__':
-    [b.append(None) or print(l_print(l_eval(l_read(_make_stream(input('> ')))))) for b in [[None]] for a in b]
+    [b.append(l_read(_make_stream(input('> ')))) or (print(l_print(l_eval(b[-1]))) if b[-1] is not None else b.append('')) for b in [['']] for a in b]

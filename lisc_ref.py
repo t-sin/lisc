@@ -11,14 +11,12 @@ def _make_stream(s):
 
 def l_read_list(s):
     list = []
-    _read_char(s)
     while True:
         ch, _ = _peek_char(s)
         if ch is None:
             return list
 
         if ch == ')':
-            _read_char(s)
             return list
         elif ch == ' ':
             _read_char(s)
@@ -59,6 +57,7 @@ def l_read(s):
 
     ch, _ = _peek_char(s)
     if ch == '(':
+        c,_ = _read_char(s)
         return l_read_list(s)
     elif ch == '"':
         _read_char(s)

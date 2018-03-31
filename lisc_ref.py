@@ -116,7 +116,7 @@ def l_eval(l, env=env):
         return '__invalid_object__'
 
 def l_print(l):
-    return 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else repr(l[1]) if type(l) is tuple and l[0] == 'str' else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
+    return '' if l is None else 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else repr(l[1]) if type(l) is tuple and l[0] == 'str' else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
 
 if __name__ == '__main__':
     [b.append(None) or print(l_print(l_eval(l_read(_make_stream(input('> ')))))) for b in [[None]] for a in b]

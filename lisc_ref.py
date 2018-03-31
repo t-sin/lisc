@@ -38,6 +38,19 @@ def l_read_symbol(s):
             _read_char(s)
             name.append(ch)
 
+def l_read_string(s):
+    chars = []
+    while True:
+        ch, _ = _peek_char(s)
+        if ch is None:
+            return ('str', ''.join(chars))
+
+        _read_char(s)
+        if ch == '"':
+            return ('str', ''.join(chars))
+        else:
+            chars.append(ch)
+
 def l_read(s):
     while True:
        ch, _ =  _peek_char(s)
@@ -47,6 +60,9 @@ def l_read(s):
     ch, _ = _peek_char(s)
     if ch == '(':
         return l_read_list(s)
+    elif ch == '"':
+        _read_char(s)
+        return l_read_string(s)
     elif ch == ')':
         raise Exception
     else:

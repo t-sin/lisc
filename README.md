@@ -38,7 +38,7 @@ false
 lisp
 ```
 
-Reversing a list with recursion and list operation
+Reversing a list with recursion and list operation.
 
 ```lisp
 > (define -reverse-rec (lambda (lis rev) (if (eq lis nil) rev (-reverse-rec (cdr lis) (cons (car lis) rev)))))
@@ -49,12 +49,25 @@ Reversing a list with recursion and list operation
 (5 4 3 2 1)
 ```
 
+LISC can run programs in file.
+
+```lisp
+$ cat reverse.l
+(define _reverse (lambda (lis rev) (if (eq lis nil) rev (_reverse (cdr lis) (cons (car lis) rev)))))
+(define reverse (lambda (lis) (_reverse lis nil)))
+$ python3 lisc.py
+> (load "reverse.l")
+...
+> (reverse (quote (1 2 3 4 5)))
+(5 4 3 2 1)
+```
+
 ...and more
 
 ## TODO
 
-- [ ] load programs from stdin/files
-- [ ] string type
+- [x] load programs from stdin/files
+- [x] string type
 - [ ] input/output string
 
 
@@ -64,6 +77,7 @@ For restriction of list comprehension, some LISC's behaviours are felt little st
 
 - Conses are represented as a Python's lists
     - therefore, behaviours of `cons`, `car` and `cdr` are different from Pure LISP little a bit
+    - `cons` behaves like Clojure's one
 - Errors are returned as a normal value like `__*__`
     - because raising and excepting exception are statements, not expression
 

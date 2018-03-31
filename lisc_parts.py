@@ -21,7 +21,7 @@ def _read_string(stream):
     return ('str', ''.join([[(_read_char(stream) and None) or chars if _peek_char(stream)[0] == '"' else loop.append(_read_char(stream)[0]) or chars for chars in loop] for loop in [['']]][0]))
 
 def l_read(stream):
-    return [[loop.append(None) or _read_char(stream) if _peek_char(stream)[0] == ' ' else None for l in loop] for loop in [[None]]] and ((_read_char(stream) and None) or _read_list(stream) if _peek_char(stream)[0] == '(' else ((_read_char(stream) and None) or _read_string(stream)) if _peek_char(stream)[0] == '"' else _read_symbol(stream))
+    return [[_read_char(stream) and loop.append(None) if  _peek_char(stream)[0] in [' ', '\n'] else None for l in loop] for loop in [[None]]] and ((_read_char(stream) and None) or _read_list(stream) if _peek_char(stream)[0] == '(' else ((_read_char(stream) and None) or _read_string(stream)) if _peek_char(stream)[0] == '"' else _read_symbol(stream))
 
 # constants and functions
 env = (None, {})
@@ -39,7 +39,7 @@ def l_eval(l, env=env):
 
 # printer
 def l_print(l):
-    return 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else repr(l[1]) if l[0] == 'str' else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
+    return 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else repr(l[1]) if type(l) is tuple and l[0] == 'str' else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
 
 if __name__ == '__main__':
     [b.append(None) or print(l_print(l_eval(l_read(_make_stream(input('> ')))))) for b in [[None]] for a in b]

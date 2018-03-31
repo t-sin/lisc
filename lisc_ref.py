@@ -79,7 +79,7 @@ env[1]['car'] = ('lambda', None, lambda l: l[0])
 env[1]['cdr'] = ('lambda', None, lambda l: l[1:] if len(l) > 1 else [])
 env[1]['eq'] = ('lambda', None, lambda a, b: 't' if ('nil' in [a,b] and [] in [a,b]) or a == b else [])
 
-env[1]['load'] = ('lambda', None, lambda s: '__invalid_filename__' if type(s) is not tuple or s[0] != 'str' else [vals.append(l_eval(l_read(stream))) or vals if _peek_char(stream)[0] is not None else None for stream in [_make_stream(''.join([l for l in open(s[1]).readline()]))] for vals in [[]]][0])
+env[1]['load'] = ('lambda', None, lambda s: '__invalid_filename__' if type(s) is not tuple or s[0] != 'str' else [(lambda f: f if f is None else lis.append(l_eval(f)))(l_read(stream)) or lis for stream in [_make_stream(''.join([l.replace('\n', ' ') or l for l in open(s[1])]))] for lis in [[None]] for loop in lis][0])
 
 def l_eval(l, env=env):
     if type(l) is list:

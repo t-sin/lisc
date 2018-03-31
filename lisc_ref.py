@@ -17,6 +17,7 @@ def l_read_list(s):
             return list
 
         if ch == ')':
+            _read_char(s)
             return list
         elif ch == ' ':
             _read_char(s)

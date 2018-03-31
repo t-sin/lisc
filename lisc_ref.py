@@ -1,42 +1,56 @@
 #!/bin/python3
 
+def _read_char(stream):
+    return [(stream.pop() and None) or stream.append(-1) or (None, stream) if pos >= len(stream[0]) else (None, stream) if pos == -1 else c.append(stream[0][pos]) or (stream.pop() and None) or stream.append(pos+1) or (c[0], stream) for c in [[]] for pos in [stream[1]]][0]
+
+def _peek_char(stream):
+    return [(None, stream) if pos >= len(stream[0]) else (None, stream) if pos == -1 else (stream[0][pos], stream) for pos in [stream[1]]][0]
+
+def _make_stream(s):
+    return [s, 0]
+
 def l_read_list(s):
     list = []
-    i = 0
+    _read_char(s)
     while True:
-        if i >= len(s):
-            return (list, len(s))
-        c = s[i]
-        if c == ')':
-            return (list, i+2)
-        elif c == ' ':
-            i += 1
+        ch, _ = _peek_char(s)
+        if ch is None:
+            return list
+
+        if ch == ')':
+            _read_char(s)
+            return list
+        elif ch == ' ':
+            _read_char(s)
         else:
-            (l, n) = l_read(s[i:])
-            i += n
-            list.append(l)
+            list.append(l_read(s))
 
 def l_read_symbol(s):
     name = []
-    i = 0
     while True:
-        if i >= len(s):
-            return (''.join(name), len(s))
-        c = s[i]
-        if c == ' ' or c == ')':
-            return (''.join(name), i)
+        ch, _ = _peek_char(s)
+        if ch is None:
+            return ''.join(name)
+
+        if ch in [' ', ')']:
+            return ''.join(name)
         else:
-            name.append(c)
-        i += 1
+            _read_char(s)
+            name.append(ch)
 
 def l_read(s):
-    s2 = s.strip()
-    if s2[0] == '(':
-        return l_read_list(s2[1:])
-    elif s2[0] == ')':
+    while True:
+       ch, _ =  _peek_char(s)
+       if ch != ' ': break
+       _read_char(s)
+
+    ch, _ = _peek_char(s)
+    if ch == '(':
+        return l_read_list(s)
+    elif ch == ')':
         raise Exception
     else:
-        return l_read_symbol(s2)
+        return l_read_symbol(s)
 
 env = (None, {})
 env[1]['nil'] = []
@@ -83,4 +97,4 @@ def l_print(l):
     return 'nil' if l == [] else '(' + ' '.join([l_print(e) for e in l]) + ')' if type(l) is list else '[{}]'.format(' '.join([str(e) for e in l])) if type(l) is tuple else str(l)
 
 if __name__ == '__main__':
-    [b.append(None) or print(l_print(l_eval(l_read(input('> '))[0]))) for b in [[None]] for a in b]
+    [b.append(None) or print(l_print(l_eval(l_read(_make_stream(input('> ')))))) for b in [[None]] for a in b]

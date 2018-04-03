@@ -52,11 +52,16 @@ Reversing a list with recursion and list operation.
 LISC can run programs in file.
 
 ```lisp
-$ cat reverse.l
-(define _reverse (lambda (lis rev) (if (eq lis nil) rev (_reverse (cdr lis) (cons (car lis) rev)))))
-(define reverse (lambda (lis) (_reverse lis nil)))
+$ cat examples/reverse.l
+(define _reverse
+  (lambda (lis rev)
+    (if (eq lis nil)
+        rev
+        (_reverse (cdr lis) (cons (car lis) rev)))))
+(define reverse
+  (lambda (lis) (_reverse lis nil)))
 $ python3 lisc.py
-> (load "reverse.l")
+> (load "examples/reverse.l")
 ...
 > (reverse (quote (1 2 3 4 5)))
 (5 4 3 2 1)
@@ -69,7 +74,7 @@ $ python3 lisc.py
 - [x] load programs from stdin/files
 - [x] string type
 - [ ] input/output string
-
+- [ ] Foreign Function Interfaces against Python
 
 ## Compromises
 

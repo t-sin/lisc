@@ -25,7 +25,7 @@
                 (if (eq (car form) (quote quote))
                     (car (cdr form))
                     (if (eq (car form) (quote lambda))
-                        (quote :lambda:)
+                        (cons (quote :lambda:) (cons (car (cdr form)) (cons (car (cdr (cdr form))) nil)))
                         (if (eq (car form) (quote define))
                             (quote :define)
                             (quote :function-call:)))))))))

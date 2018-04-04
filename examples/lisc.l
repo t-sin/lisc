@@ -21,7 +21,7 @@
             (if (eq (car form) (quote if))
                 (quote :if:)
                 (if (eq (car form) (quote quote))
-                    (quote :quote:)
+                    (car (cdr form))
                     (if (eq (car form) (quote lambda))
                         (quote :lambda:)
                         (if (eq (car form) (quote define))

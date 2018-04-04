@@ -19,7 +19,9 @@
         (if (eq (cdr form) nil)
             nil
             (if (eq (car form) (quote if))
-                (quote :if:)
+                (if (eval (car (cdr form)) env)
+                    (eval (car (cdr (cdr form))) env)
+                    (eval (car (cdr (cdr (cdr form)))) env))
                 (if (eq (car form) (quote quote))
                     (car (cdr form))
                     (if (eq (car form) (quote lambda))

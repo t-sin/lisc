@@ -58,7 +58,7 @@ def l_read(s):
 
     ch, _ = _peek_char(s)
     if ch is None:
-        nil
+        None
     elif ch == '(':
         c,_ = _read_char(s)
         return l_read_list(s)

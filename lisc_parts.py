@@ -36,7 +36,7 @@ _env[1]['eq'] = ('lambda', None, lambda a, b: 't' if ('nil' in [a,b] and [] in [
 _env[1]['load'] = ('lambda', None, lambda s: '__invalid_filename__' if type(s) is not tuple or s[0] != 'str' else [(lambda f: f if f is None else lis.append(l_eval(f)))(l_read(stream)) or lis for stream in [_make_stream(''.join([l.replace('\n', ' ') or l for l in open(s[1])]))] for lis in [[None]] for loop in lis][0][-1])
 
 # evaluator
-def l_eval(l, env=env):
+def l_eval(l, env=_env):
     return ('nil' if len(l) == 0 else (l_eval(l[2], env) if len(l) == 4 and l_eval(l[1], env) == 't' else l_eval(l[3], env)) if l[0] == 'if' else (l[1] if len(l) == 2 else '__quote_invalid_argument__') if l[0] == 'quote' else (('lambda', l[1], lambda new_env: l_eval(l[2], (env, new_env))) if len(l) == 3 else '__invalid_lambda_expression__') if l[0] == 'lambda' else (_env[1].update({l[1]: l_eval(l[2], env)}) or (_env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__')) if l[0] == 'define' else [[fn[2](*eval_args) if fn[1] is None else fn[2](dict(zip(fn[1], eval_args))) if len(fn[1])+1 == len(l) else '__wrong_number_of_args__' for eval_args in [[l_eval(a, env) for a in l[1:]]]][0] if type(fn) is tuple and fn[0] == 'lambda' else '__undefined_operator__' for fn in [l_eval(l[0], env)]][0]) if type(l) is list else l if type(l) is tuple else [search_val(env, l) for _ in [None] for search_val in [lambda e, s: [v if v is not None else '__unbound_variable__' if e[0] is None else search_val(e[0], s) for v in [e[1].get(s, None)]][0]]][0] if type(l) is str else None if l is None else '__invalid_object__'
 
 # printer

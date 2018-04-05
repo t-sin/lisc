@@ -7,17 +7,17 @@
             (assoc item (cdr lis))))))
 
 (define updatev
-  (lambda (env name value)))
+  (lambda (env name value) value))
 
 (define setv
   (lambda (name value)
     ((lambda (pair)
        (if (eq pair nil)
-           (cons nil (cons (cons name (cons value nil)) (car (cdr env))))
-           (define env (cons nil (update-value name value)))))
+           (define *env* (cons nil (cons (cons name (cons value nil)) (car (cdr *env*)))))
+           (define *env* (cons nil (update-value name value)))))
      (assoc name (car (cdr env))))))
 
-(define env (quote (nil nil)))
+(define *env* (quote (nil nil)))
 
 (define eval
   (lambda (form env)

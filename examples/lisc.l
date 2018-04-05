@@ -22,6 +22,16 @@
            (define *env* (cons nil (cons (_updatev (car (cdr *env*)) name value) nil)))))
      (_assoc name (car (cdr *env*))))))
 
+(define _lookup
+  (lambda (name env)
+    ((lambda (pair)
+       (if (eq pair nil)
+           (if (eq (car env) nil)
+               (quote :unbound:)
+               (_lookup name (car cdr env)))
+           (car (cdr pair))))
+     (_assoc name (car (cdr env))))))
+
 (define *env* (quote (nil nil)))
 
 (define _eval
@@ -29,9 +39,9 @@
     (if (atom form)
         (if (eq form nil)
             nil
-            (if (eq (car form) t)
-                   (car form)
-                   (car (_assoc form env))))
+            (if (eq form t)
+                form
+                (_lookup form env)))
         (if (eq (cdr form) nil)
             nil
             (if (eq (car form) (quote if))

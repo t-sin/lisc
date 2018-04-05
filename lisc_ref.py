@@ -70,18 +70,18 @@ def l_read(s):
     else:
         return l_read_symbol(s)
 
-env = (None, {})
-env[1]['nil'] = []
-env[1]['t'] = 't'
-env[1]['atom'] = ('lambda', None, lambda o: 't' if type(o) is not list else [])
-env[1]['cons'] = ('lambda', None, lambda a, b: [a] if b in ['nil', []] else [a] + b if type(b) is list else '__{}_is_not_a_list__'.format(b))
-env[1]['car'] = ('lambda', None, lambda l: l[0])
-env[1]['cdr'] = ('lambda', None, lambda l: l[1:] if len(l) > 1 else [])
-env[1]['eq'] = ('lambda', None, lambda a, b: 't' if ('nil' in [a,b] and [] in [a,b]) or a == b else [])
+_env = (None, {})
+_env[1]['nil'] = []
+_env[1]['t'] = 't'
+_env[1]['atom'] = ('lambda', None, lambda o: 't' if type(o) is not list else [])
+_env[1]['cons'] = ('lambda', None, lambda a, b: [a] if b in ['nil', []] else [a] + b if type(b) is list else '__{}_is_not_a_list__'.format(b))
+_env[1]['car'] = ('lambda', None, lambda l: l[0])
+_env[1]['cdr'] = ('lambda', None, lambda l: l[1:] if len(l) > 1 else [])
+_env[1]['eq'] = ('lambda', None, lambda a, b: 't' if ('nil' in [a,b] and [] in [a,b]) or a == b else [])
 
-env[1]['load'] = ('lambda', None, lambda s: '__invalid_filename__' if type(s) is not tuple or s[0] != 'str' else [(lambda f: f if f is None else lis.append(l_eval(f)))(l_read(stream)) or lis for stream in [_make_stream(''.join([l.replace('\n', ' ') or l for l in open(s[1])]))] for lis in [[None]] for loop in lis][0])
+_env[1]['load'] = ('lambda', None, lambda s: '__invalid_filename__' if type(s) is not tuple or s[0] != 'str' else [(lambda f: f if f is None else lis.append(l_eval(f)))(l_read(stream)) or lis for stream in [_make_stream(''.join([l.replace('\n', ' ') or l for l in open(s[1])]))] for lis in [[None]] for loop in lis][0])
 
-def l_eval(l, env=env):
+def l_eval(l, env=_env):
     if type(l) is list:
         if len(l) == 0:
             return []
@@ -92,7 +92,7 @@ def l_eval(l, env=env):
         elif l[0] == 'lambda':
             return ('lambda', l[1], lambda new_env: l_eval(l[2], (env, new_env))) if len(l) == 3 else '__invalid_lambda_expression__'
         elif l[0] == 'define':
-            return env[1].update({l[1]: l_eval(l[2], env)}) or (env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__')
+            return _env[1].update({l[1]: l_eval(l[2], env)}) or (_env[1][l[1]] if len(l) == 3 else '__define_invalid_argument__')
         else:
             fn = l_eval(l[0], env)
             if type(fn) is tuple and fn[0] == 'lambda':

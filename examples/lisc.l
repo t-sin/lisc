@@ -60,14 +60,15 @@
                 (if (eq (car form) (quote quote))
                     (car (cdr form))
                     (if (eq (car form) (quote lambda))
-                        (cons (quote :lambda:) (cons (car (cdr form)) (cons (car (cdr (cdr form))) nil)))
+                        (cons (quote :lambda:)
+                              (cons (car (cdr form))
+                                    (cons (lambda (ne) (_eval (car (cdr (cdr form))) ne)) nil)))
                         (if (eq (car form) (quote define))
                             (_setv (car (cdr form)) (_eval (car (cdr (cdr form))) env))
                             ((lambda (fn)
                                (if (eq fn (quote :unbound:))
                                    (quote :undefined-op:)
-                                   (_eval (car (cdr (cdr fn)))
-                                          (cons nil (cons (car (cdr env)) nil)))))
+                                   ((car (cdr (cdr fn))) (cons env (cons (_bind (car (cdr fn)) (cdr form) env) nil)))))
                              (_lookup (car form) env))))))))))
 
 (define eval

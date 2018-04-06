@@ -42,6 +42,11 @@
                   (_bind (cdr fn-args) (cdr act-args) env))))))
 
 (define *env* (quote (nil nil)))
+(_setv (quote cons)
+       (cons (quote :lambda:)
+             (cons (quote (a b))
+                   (cons (lambda (ne) (cons (_lookup (quote a) ne) (_lookup (quote b) ne)))
+                         nil))))
 
 (define _eval
   (lambda (form env)

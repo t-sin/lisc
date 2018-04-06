@@ -37,8 +37,8 @@
     (if (eq fn-args nil)
         nil
         (if (eq act-args nil)
-            :too-few-args:
-            (cons (cons (car fn-args (cons (_eval (car act-args) env) nil)) nil)
+            (quote :too-few-args:)
+            (cons (cons (car fn-args) (cons (_eval (car act-args) env) nil))
                   (_bind (cdr fn-args) (cdr act-args) env))))))
 
 (define *env* (quote (nil nil)))
@@ -64,7 +64,10 @@
                         (if (eq (car form) (quote define))
                             (_setv (car (cdr form)) (_eval (car (cdr (cdr form))) env))
                             ((lambda (fn)
-                               (_eval (car (cdr (cdr fn))) (cons env (cons (_bind (car (cdr fn)) (car (cdr form))) nil))))
+                               (if (eq fn (quote :unbound:))
+                                   (quote :undefined-op:)
+                                   (_eval (car (cdr (cdr fn)))
+                                          (cons nil (cons (car (cdr env)) nil)))))
                              (_lookup (car form) env))))))))))
 
 (define eval

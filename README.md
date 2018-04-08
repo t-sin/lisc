@@ -67,7 +67,19 @@ $ python3 lisc.py
 (5 4 3 2 1)
 ```
 
-...and more
+Of cource, now we can implement the *meta-circular evaluator*.
+
+```lisp
+> (load "examples/lisc.l")
+[lambda ['form'] <fn 139990349635096>]
+> (eval (quote (define fn (lambda (a b) (cons a (cons b nil))))))
+...
+> (eval (quote (fn (quote foo) (quote bar))))
+(foo bar)
+```
+
+For details, see [lisc.l](examples/lisc.l).
+
 
 ## TODO
 

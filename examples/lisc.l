@@ -28,7 +28,7 @@
        (if (eq pair nil)
            (if (eq (car env) nil)
                (quote :unbound:)
-               (_lookup name (car cdr env)))
+               (_lookup name (car env)))
            (car (cdr pair))))
      (_assoc name (car (cdr env))))))
 

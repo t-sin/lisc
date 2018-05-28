@@ -108,4 +108,4 @@ For restriction of list comprehension, some LISC's behaviours are felt little st
 
 ## License
 
-LISC is licensed under the GNU General Public License version 3.
+LISC is licensed under the GNU General Public License version 3. But example codes (`examples/*.l`) are public domain.

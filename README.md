@@ -38,6 +38,23 @@ false
 lisp
 ```
 
+We can treat strings, especially input/output.
+
+```lisp
+> "some string"
+'some string'
+> (reads "input> ")
+input> test string
+'test string'
+> (prints "output!")
+output!
+nil
+> (heads "test")
+'t'
+> (tails "test")
+'est'
+```
+
 Reversing a list with recursion and list operation.
 
 ```lisp
@@ -85,7 +102,7 @@ For details, see [lisc.l](examples/lisc.l).
 
 - [x] load programs from stdin/files
 - [x] string type
-- [ ] input/output string
+- [x] input/output string
 - [ ] Foreign Function Interfaces against Python
 
 ## Compromises

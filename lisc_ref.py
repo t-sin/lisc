@@ -83,6 +83,8 @@ _env[1]['load'] = ('lambda', None, lambda s: '__invalid_filename__' if type(s) i
 
 _env[1]['reads'] = ('lambda', None, lambda s: ('str', input(s[1])))
 _env[1]['prints'] = ('lambda', None, lambda s: print(s[1]) or [])
+_env[1]['heads'] = ('lambda', None, lambda s: ('str', s[1][0]))
+_env[1]['tails'] = ('lambda', None, lambda s: ('str', '' if len(s[1]) == 0 else s[1][1:]))
 
 def l_eval(l, env=_env):
     if type(l) is list:

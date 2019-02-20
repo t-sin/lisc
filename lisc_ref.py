@@ -81,6 +81,8 @@ _env[1]['eq'] = ('lambda', None, lambda a, b: 't' if ('nil' in [a,b] and [] in [
 
 _env[1]['load'] = ('lambda', None, lambda s: '__invalid_filename__' if type(s) is not tuple or s[0] != 'str' else [(lambda f: f if f is None else lis.append(l_eval(f)))(l_read(stream)) or lis for stream in [_make_stream(''.join([l.replace('\n', ' ') or l for l in open(s[1])]))] for lis in [[None]] for loop in lis][0])
 
+_env[1]['reads'] = ('lambda', None, lambda s: ('str', input(s[1])))
+
 def l_eval(l, env=_env):
     if type(l) is list:
         if len(l) == 0:
